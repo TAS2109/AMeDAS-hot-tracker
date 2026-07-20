@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}地点検索 - 全国アメダス高温予測{% endblock %}
+{% block content %}
+
+<section class="card">
+  <h2 class="card-title">地点検索</h2>
+  <input type="text" id="search-input" class="search-input" placeholder="地点名・都道府県名で検索（例：熊谷、埼玉）">
+  <div class="pref-chip-row" id="pref-chip-row"></div>
+</section>
+
+<section class="card">
+  <ul class="search-result-list" id="search-result-list"></ul>
+</section>
+
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+{% endblock %}

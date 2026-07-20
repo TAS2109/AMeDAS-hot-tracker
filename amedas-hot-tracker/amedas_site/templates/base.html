@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>{% block title %}全国アメダス高温予測{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% block head %}{% endblock %}
+</head>
+<body>
+<header class="app-header">
+  <a href="{{ url_for('index') }}" class="logo">🌡️ 全国アメダス高温予測</a>
+  <nav class="app-nav">
+    <a href="{{ url_for('index') }}">トップ</a>
+    <a href="{{ url_for('search_page') }}">検索</a>
+    <a href="{{ url_for('compare_page') }}">比較</a>
+  </nav>
+</header>
+
+<main class="app-main">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="app-footer">
+  <span id="footer-updated">更新時刻取得中...</span>
+  <span class="footer-note">観測データはアメダスに基づく速報値です。参考情報としてご利用ください。</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

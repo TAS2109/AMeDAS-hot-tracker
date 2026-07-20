@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}{{ station.name }} - 全国アメダス高温予測{% endblock %}
+{% block content %}
+<div id="station-sid" data-sid="{{ sid }}" data-name="{{ station.name }}" data-pref="{{ station.pref }}"></div>
+
+<section class="card station-head">
+  <div class="station-title-row">
+    <h1 class="station-name">{{ station.name }}<span class="station-pref">（{{ station.pref }}）</span></h1>
+    <span class="heat-badge" id="heat-badge">-</span>
+  </div>
+  <div class="station-main-temps">
+    <div class="stat-box big">
+      <div class="stat-label">現在気温</div>
+      <div class="stat-value" id="st-current">--.-℃</div>
+    </div>
+    <div class="stat-box big">
+      <div class="stat-label">推定最高気温</div>
+      <div class="stat-value accent" id="st-estimated">--.-℃</div>
+      <div class="stat-sub" id="st-range">予測幅 --.-～--.-℃</div>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-box"><div class="stat-label">今日の最高</div><div class="stat-value" id="st-todaymax">--.-℃</div><div class="stat-sub" id="st-todaymax-time">-</div></div>
+    <div class="stat-box"><div class="stat-label">40℃到達確率</div><div class="stat-value" id="st-prob40">--%</div></div>
+    <div class="stat-box"><div class="stat-label">ピーク予想時刻</div><div class="stat-value" id="st-peaktime">--:--</div></div>
+    <div class="stat-box"><div class="stat-label">記録更新確率</div><div class="stat-value" id="st-probrecord">--%</div></div>
+  </div>
+</section>
+
+<section class="card">
+  <div class="graph-header">
+    <h2 class="card-title">気温推移</h2>
+    <div class="graph-toggles">
+      <label><input type="checkbox" id="toggle-yesterday"> 昨日</label>
+      <label><input type="checkbox" id="toggle-normal"> 平年値</label>
+      <label><input type="checkbox" id="toggle-projection" checked> 推定曲線</label>
+    </div>
+  </div>
+  <canvas id="temp-chart" height="220"></canvas>
+</section>
+
+<section class="card">
+  <h2 class="card-title">気温推移解析</h2>
+  <div class="stat-grid">
+    <div class="stat-box"><div class="stat-label">30分変化</div><div class="stat-value" id="an-delta30">--℃</div></div>
+    <div class="stat-box"><div class="stat-label">1時間変化</div><div class="stat-value" id="an-delta60">--℃</div></div>
+    <div class="stat-box"><div class="stat-label">昇温ペース</div><div class="stat-value" id="an-pace">--℃/時</div></div>
+    <div class="stat-box"><div class="stat-label">変動幅(σ)</div><div class="stat-value" id="an-sigma">--℃</div></div>
+    <div class="stat-box"><div class="stat-label">類似日補正</div><div class="stat-value" id="an-similar">--℃</div></div>
+    <div class="stat-box"><div class="stat-label">気象補正係数</div><div class="stat-value" id="an-adjust">--</div></div>
+  </div>
+</section>
+
+<section class="card">
+  <h2 class="card-title">気象データ</h2>
+  <div class="weather-grid" id="weather-grid">
+    <div class="w-item"><span class="w-label">湿度</span><span class="w-value" id="w-humidity">-</span></div>
+    <div class="w-item"><span class="w-label">風速</span><span class="w-value" id="w-wind">-</span></div>
+    <div class="w-item"><span class="w-label">風向</span><span class="w-value" id="w-winddir">-</span></div>
+    <div class="w-item"><span class="w-label">日照(直近)</span><span class="w-value" id="w-sun">-</span></div>
+    <div class="w-item"><span class="w-label">気圧</span><span class="w-value" id="w-pressure">-</span></div>
+    <div class="w-item"><span class="w-label">降水量</span><span class="w-value" id="w-precip">-</span></div>
+  </div>
+</section>
+
+<section class="card">
+  <h2 class="card-title">高層気象</h2>
+  <div class="weather-grid">
+    <div class="w-item"><span class="w-label">850hPa気温</span><span class="w-value" id="u-t850">-</span></div>
+    <div class="w-item"><span class="w-label">925hPa気温</span><span class="w-value" id="u-t925">-</span></div>
+    <div class="w-item"><span class="w-label">975hPa気温</span><span class="w-value" id="u-t975">-</span></div>
+  </div>
+  <p class="analysis-text" id="u-analysis">-</p>
+</section>
+
+<section class="card">
+  <h2 class="card-title">記録比較</h2>
+  <table class="record-table">
+    <tr><th>観測史上最高</th><td id="rec-record">--.-℃</td><td id="rec-record-diff">-</td></tr>
+    <tr><th>今年の最高</th><td id="rec-year">--.-℃</td><td id="rec-year-diff">-</td></tr>
+    <tr><th>今月の最高(目安)</th><td id="rec-month">--.-℃</td><td id="rec-month-diff">-</td></tr>
+    <tr><th>平年差</th><td colspan="2" id="rec-normal">-</td></tr>
+    <tr><th>全国順位</th><td colspan="2" id="rec-rank-nat">-</td></tr>
+    <tr><th>都道府県順位</th><td colspan="2" id="rec-rank-pref">-</td></tr>
+  </table>
+  <p class="hint" id="rec-estimate-note" style="display:none;">※この地点の平年値・記録値は近隣地点からの概算値です（公式統計値ではありません）</p>
+</section>
+
+<section class="card">
+  <a class="btn-secondary" id="add-compare-link" href="#">この地点を比較に追加 →</a>
+</section>
+
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/station.js') }}"></script>
+{% endblock %}

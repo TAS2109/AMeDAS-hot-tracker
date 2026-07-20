@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}全国アメダス高温予測 - トップ{% endblock %}
+{% block content %}
+
+<section class="hero-summary" id="hero-summary">
+  <div class="hero-top-station">
+    <div class="hero-label">現在 全国最高気温</div>
+    <div class="hero-value" id="hero-temp">--.-℃</div>
+    <div class="hero-place" id="hero-place">取得中...</div>
+  </div>
+  <div class="hero-sub-grid" id="hero-sub-grid">
+    <div class="hero-sub"><span class="hs-label">40℃到達地点</span><span class="hs-value" id="hero-count40">-</span></div>
+    <div class="hero-sub"><span class="hs-label">38℃以上</span><span class="hs-value" id="hero-count38">-</span></div>
+    <div class="hero-sub"><span class="hs-label">猛暑日(35℃+)</span><span class="hs-value" id="hero-count35">-</span></div>
+  </div>
+</section>
+
+<section class="legend-bar">
+  <span class="legend-chip blue">～25℃</span>
+  <span class="legend-chip green">25～30℃</span>
+  <span class="legend-chip yellow">30～35℃</span>
+  <span class="legend-chip orange">35～38℃</span>
+  <span class="legend-chip red">38～40℃</span>
+  <span class="legend-chip purple">40℃～</span>
+</section>
+
+<section class="card">
+  <h2 class="card-title">全国マップ</h2>
+  <div id="map-wrap" class="map-wrap">
+    <svg id="japan-map" viewBox="0 0 500 620" class="japan-map"></svg>
+  </div>
+  <p class="hint">地点をタップすると詳細ページに移動します（緯度経度から簡易配置した模式図です）</p>
+</section>
+
+<section class="card">
+  <h2 class="card-title">全国ランキング</h2>
+  <div class="tabs" id="ranking-tabs">
+    <button class="tab active" data-type="current">現在気温</button>
+    <button class="tab" data-type="today_max">本日最高</button>
+    <button class="tab" data-type="estimated_max">推定最高</button>
+    <button class="tab" data-type="prob40">40℃到達確率</button>
+    <button class="tab" data-type="pace">昇温速度</button>
+  </div>
+  <ol id="ranking-list" class="ranking-list">
+    <li class="loading skeleton-line">読み込み中...</li>
+  </ol>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

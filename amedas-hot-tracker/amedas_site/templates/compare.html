@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}地点比較 - 全国アメダス高温予測{% endblock %}
+{% block content %}
+<div id="compare-init" data-ids="{{ ids }}"></div>
+
+<section class="card">
+  <h2 class="card-title">比較する地点を選択（2～4地点）</h2>
+  <div class="compare-picker">
+    <input type="text" id="compare-search" class="search-input" placeholder="地点名・都道府県名で検索して追加" autocomplete="off">
+    <ul id="compare-suggestions" class="compare-suggestions"></ul>
+  </div>
+  <div class="compare-chips" id="compare-chips"></div>
+</section>
+
+<section class="card" id="compare-table-card" style="display:none;">
+  <h2 class="card-title">比較テーブル</h2>
+  <div class="table-scroll">
+    <table class="compare-table" id="compare-table"></table>
+  </div>
+</section>
+
+<section class="card" id="compare-graph-card" style="display:none;">
+  <h2 class="card-title">気温推移（重ね表示）</h2>
+  <canvas id="compare-chart" height="240"></canvas>
+</section>
+
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/compare.js') }}"></script>
+{% endblock %}
