@@ -37,7 +37,7 @@ import requests
 
 JST = ZoneInfo("Asia/Tokyo")
 
-USE_MOCK = os.environ.get("AMEDAS_MOCK", "1") != "0"
+USE_MOCK = os.environ.get("AMEDAS_MOCK", "0") != "1"
 REQUEST_TIMEOUT = 8
 
 BASE = "https://www.jma.go.jp/bosai/amedas"
